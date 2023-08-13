@@ -1,0 +1,26 @@
+version: "3.4"
+
+services:
+
+  dendrite:
+    hostname: dendrite
+    image: matrixdotorg/dendrite-monolith:latest
+    ports:
+      - 127.0.0.1:50003:8008
+      - 127.0.0.1:50004:8448
+    volumes:
+      - ./config:/etc/dendrite
+      - ./dendrite_media:/var/dendrite/media
+      - ./dendrite_jetstream:/var/dendrite/jetstream
+      - ./dendrite_search_index:/var/dendrite/searchindex
+    restart: unless-stopped
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.22.0/24
