@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  gitea:
+    hostname: gitea
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    networks:
+      - default
+    volumes:
+      - ./data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 127.0.0.1:50005:3000
+      - 127.0.0.1:50006:22
+    env_file:
+      - gitea.env
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.27.27.0/24
