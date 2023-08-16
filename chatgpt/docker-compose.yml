@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+
+  chatgpt:
+    hostname: chatgpt
+    image: ghcr.io/n3d1117/chatgpt-telegram-bot:latest
+    volumes:
+      - ./data:/app
+    env_file:
+      - chatgpt.env
+    restart: unless-stopped
