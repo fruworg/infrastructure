@@ -73,7 +73,9 @@ client_api:
   turn:
     turn_user_lifetime: "5m"
     turn_uris:
-    turn_shared_secret: ""
+      - turn:turn.fruw.org?transport=udp
+      - turn:turn.fruw.org?transport=tcp
+    turn_shared_secret: "$TURN_SHARED_SECRET"
 
   rate_limiting:
     enabled: false
