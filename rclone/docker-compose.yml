@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+
+  rclone:
+    image: rclone/rclone
+    container_name: rclone
+    command: rcd --rc-web-gui --rc-addr :50007 --rc-user admin --rc-pass $RCLONE_ADMIN_PASSWORD
+    ports:
+      - "127.0.0.1:50007:50007"
+    volumes:
+      - ./data:/config/rclone:rw
+      - ./logs:/logs:rw
+    environment:
+      - PHP_TZ=+6
+    restart: unless-stopped
