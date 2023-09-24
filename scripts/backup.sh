@@ -11,7 +11,7 @@ GDRIVE_FOLDER="/mnt/gdrive/backups"
 clean_old_backups() {
   local CLEANED_FOLDER="$1"
 
-  for BACKUP_FILE in {/var/backups/infrastructure,/mnt/mega/backups}/*.tar.zst.gpg; do
+  for BACKUP_FILE in $CLEANED_FOLDER/*.tar.zst.gpg; do
 
     BACKUP_DATE="$(echo $BACKUP_FILE | egrep -o [0-9]{2}-[0-9]{2}-[0-9]{4} | sed -e 's/-//g')"
 
