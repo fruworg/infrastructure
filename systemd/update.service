@@ -2,7 +2,7 @@
 Description=Update Service
 
 [Service]
-Type=simple
+Type=oneshot
 ExecStart=/usr/local/bin/update.sh
 
 [Install]
