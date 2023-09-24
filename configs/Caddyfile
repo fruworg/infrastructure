@@ -1,0 +1,94 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+{
+	email im@fruw.org
+	acme_dns google_domains $API_KEY
+}
+
+vault.fruw.org {
+	reverse_proxy localhost:50000
+}
+
+mail.fruw.org {
+	reverse_proxy localhost:50001
+}
+
+matrix.fruw.org, matrix.fruw.org:8448 {
+	rewrite / /_matrix/static/
+	reverse_proxy /_matrix/* localhost:50003
+}
+
+git.fruw.org {
+	rewrite / /fruworg
+	reverse_proxy localhost:50005
+}
+
+turn.fruw.org {
+	#route / {
+		#exec /usr/local/bin/caddy.sh 3478
+	#}
+
+	#@available {
+	#     status 0
+	#}
+
+	#respond "whoa! eturnal server is runnig" 200 {
+	#     @available
+	#}
+
+	#respond "oops! eturnal server is not running" 503
+	respond "whoa! eturnal server is runnig" 200 
+}
+
+rclone.fruw.org {
+	reverse_proxy 127.0.0.1:53682
+	respond "nothing to auth" 404
+}
+
+cs.fruw.org {
+	respond "whoa! cstrike server is runnig" 200
+}
+
+doom.fruw.org {
+	#route / {
+		#exec /usr/local/bin/caddy.sh 10666
+	#}
+
+	#exec /usr/local/bin/caddy.sh 10666
+
+	#@available {
+	#     status 0
+	#}
+
+	#respond "whoa! doom2 server is runnig" 200 {
+	#     @available
+	#}
+
+	respond "oops! doom2 server is not running" 503
+}
+
+fs.fruw.org, http://fs.fruw.org {
+	root * /var/caddy
+	file_server browse
+}
+
+ip.fruw.org, http://ip.fruw.org {
+	templates
+	respond "{{.RemoteIP}}"
+}
+
+fruw.org, *.fruw.org {
+	respond "hello there"
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile
+

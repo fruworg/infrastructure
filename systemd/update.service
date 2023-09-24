@@ -1,0 +1,9 @@
+[Unit]
+Description=Update Service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/update.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Update Timer
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+Unit=update.service
+
+[Install]
+WantedBy=timers.target
