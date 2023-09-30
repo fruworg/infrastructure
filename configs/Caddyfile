@@ -1,7 +1,23 @@
 {
         email im@fruw.org
-        acme_dns google_domains {$API_KEY}
+        acme_dns google_domains {$CADDY_API_KEY}
 }
+
+ok.fruw.org {
+        @block {
+                not remote_ip forwarded {$WHITE_LIST}
+        }
+        handle @block {
+                basicauth {
+                        {$CADDY_LOGIN} {$CADDY_PASSWORD}
+                }
+                reverse_proxy localhost:50009 {
+                        header_up X-Real-IP {remote_host}
+                }
+        }
+        respond "IP already added! :)"
+}
+
 
 vault.fruw.org {
         handle_path / {
