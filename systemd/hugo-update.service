@@ -1,0 +1,11 @@
+[Unit]
+Description=HUGO Update Service
+
+[Service]
+Type=oneshot
+User=caddy
+Group=caddy
+ExecStart=/usr/local/bin/hugo-update.sh
+
+[Install]
+WantedBy=multi-user.target
