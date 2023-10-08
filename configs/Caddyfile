@@ -3,9 +3,14 @@
         acme_dns google_domains {$CADDY_API_KEY}
 }
 
+fruw.org {
+        root * /var/caddy/hugo
+        file_server
+}
+
 ok.fruw.org {
         @block {
-                not remote_ip forwarded {$WHITE_LIST}
+                not client_ip {$WHITE_LIST}
         }
         handle @block {
                 basicauth {
@@ -15,33 +20,30 @@ ok.fruw.org {
                         header_up X-Real-IP {remote_host}
                 }
         }
-        respond "IP already added! :)"
+        respond "IP bleached! :)"
 }
 
-
 vault.fruw.org {
-        handle_path / {
+        handle_path /admin {
+                @block {
+                        not client_ip {$WHITE_LIST}
+                }
+                handle @block {
+                        redir https://ok.fruw.org
+                }
                 reverse_proxy localhost:50000
         }
-        handle_path /* {
-                @allow {
-                        remote_ip forwarded {$WHITE_LIST}
-                }
-                handle @allow {
-                        reverse_proxy localhost:50000
-                }
-                respond 403
-        }
+        reverse_proxy localhost:50000
 }
 
 mail.fruw.org {
-        @allow {
-                remote_ip forwarded {$WHITE_LIST}
+        @block {
+                not client_ip {$WHITE_LIST}
         }
-        handle @allow {
-                reverse_proxy localhost:50001
+        handle @block {
+                redir https://ok.fruw.org
         }
-        respond 403
+        reverse_proxy localhost:50001
 }
 
 matrix.fruw.org, matrix.fruw.org:8448 {
@@ -59,14 +61,14 @@ turn.fruw.org {
 }
 
 rclone.fruw.org {
-        @allow {
-                remote_ip forwarded {$WHITE_LIST}
+        @block {
+                not client_ip {$WHITE_LIST}
         }
-        handle @allow {
-                reverse_proxy 127.0.0.1:53682
-                respond "nothing to auth" 404
+        handle @block {
+                redir https://ok.fruw.org
         }
-        respond 403
+        reverse_proxy 127.0.0.1:53682
+        respond "nothing to auth" 404
 }
 
 cs.fruw.org {
@@ -78,7 +80,7 @@ doom.fruw.org {
 }
 
 fs.fruw.org, http://fs.fruw.org {
-        root * /var/caddy
+        root * /var/caddy/fs
         file_server browse
 }
 
@@ -87,6 +89,6 @@ ip.fruw.org, http://ip.fruw.org {
         respond "{{.RemoteIP}}"
 }
 
-fruw.org, *.fruw.org {
+*.fruw.org {
         respond "hello there"
 }
