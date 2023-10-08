@@ -56,7 +56,7 @@ mkdir "$BACKUP_FOLDER/tmp/caddy/" && \
   cp -r /etc/caddy/Caddyfile "$_"
 
 mkdir "$BACKUP_FOLDER/tmp/pg/" && \
-  cp -r /etc/postgresql/15/main/{pg_hba.conf,postgresql.conf} "$_"
+  cp -r /etc/postgresql/*/main/{pg_hba.conf,postgresql.conf} "$_"
 
 mkdir "$BACKUP_FOLDER/tmp/rclone/" && \
   cp -r /etc/systemd/system/rclone-{mega,gdrive}.service \
