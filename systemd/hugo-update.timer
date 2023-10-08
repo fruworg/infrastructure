@@ -1,0 +1,9 @@
+[Unit]
+Description=HUGO Update Timer
+
+[Timer]
+OnCalendar=*:0/10
+Unit=hugo-update.service
+
+[Install]
+WantedBy=timers.target
