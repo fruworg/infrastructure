@@ -3,9 +3,21 @@
         acme_dns google_domains {$CADDY_API_KEY}
 }
 
-fruw.org {
-        root * /var/caddy/hugo
+fruw.org, fruw.org:8448 {
+        # hugo
         file_server
+        root * /var/caddy/hugo
+        handle_errors {
+                @404-410 expression `{err.status_code} in [404, 410]`
+                handle @404-410 {
+                        file_server
+                        root * /var/caddy/hugo
+                        rewrite * /404.html
+                }
+        }
+
+        # matrix
+        reverse_proxy /_matrix/* localhost:50003
 }
 
 ok.fruw.org {
